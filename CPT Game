@@ -1,0 +1,180 @@
+###RAY WANG CPT GAME###
+
+import random
+import os
+
+###VARIABLES###
+roll = ""
+points_per_turn = ""
+turns = 1
+double_roll = 0
+double_roll_success = 0
+double_roll_equal = 0
+player = ""
+message = ""
+points = 0
+choice = ""
+droll_one = ""
+droll_two = ""
+out_choice = ""
+final_choice = ""
+restart_game = False
+
+def rolled(rolled):
+  global points
+  roll = random.randrange(1,7)
+  if roll == 1:
+    points += 10
+    message = ("gained 10 points!")
+  
+  elif roll == 2:
+    points += 20
+    message = ("gained 20 points!")
+
+  elif roll == 3:
+    points += 30
+    message = ("gained 30 points!")
+  
+  elif roll == 4:
+    points -= 10
+    message = ("lost 10 points!")
+  
+  elif roll == 5:
+    points -= 20
+    message = ("lost 20 points!")
+  
+  else:
+    points -= 30
+    message = ("lost 30 points!") 
+
+  print (f"You rolled a {roll}.")
+  print ("")
+  print (f"You {message}")
+  print ("")
+  print (f"You now have {points} points.")
+  print ("")
+
+player = input("What is your name? ")
+print (f"Hi {player}! Welcome to the game.")
+print ("")
+
+while True:
+  if final_choice == "2":
+    break
+  print (f"Starting turn #{turns}")
+  print (f"You have {points} points.")
+  print ("")
+  print ("Here are your options: ")
+  print ("[1]Regular Role")
+  print ("[2]Double Role")
+  print ("[3]Cash Out (End Game)")
+  choice = input("Select what you would like to do: ")
+  print ("")
+
+  if choice == "1":
+    rolled(rolled)
+    
+  elif choice == "2":
+    double_roll += 1
+    
+    input("Press ENTER to roll die 1.")
+    droll_one = random.randrange(1,7)
+    print (f"You rolled a {droll_one} on the first die.")
+    print ("")
+    input ("Press ENTER to roll die 2.")
+    droll_two = random.randrange(1,7)
+    print (f"You rolled a {droll_two} on the second die.")
+    print ("")
+
+    if droll_one == droll_two:
+      print ("Your rolls were equal so you get 100 points!")
+      points += 100
+      double_roll_success += 1
+      double_roll_equal += 1
+
+    elif droll_two >= droll_one:
+      print ("Your second roll was larger than your first one so you get 50 points!")
+      points += 50
+      double_roll_success += 1
+    
+    else:
+      print ("Your first roll was larger than your second one so you lose 65 points!")
+      points -= 65
+
+  elif choice == "3":
+    while True:
+      if restart_game == True:
+        restart_game = False
+        break
+      elif final_choice == "2":
+        break
+      print ("")
+      print ("Are you sure you want to cash out and end the game? ")
+      print ("[1]Yes I am sure I am ready to end the game.")
+      print ("[2]No I want to go back and keep playing.")
+      out_choice = input("Select what you want to do: ")
+    
+      if out_choice == "1":
+        print ("")
+        turns -= 1
+        points_per_turn = points/turns
+
+        print (f"You played {turns} turns in total (cashing out does not count as one).")
+        print ("")
+        print (f"You finished with {points} points!")
+        print ("")
+
+        if double_roll >= 1:
+          print (f"Out of {double_roll} double rolls, you had {double_roll_success} successful double roles, {double_roll_equal} of which were equal")
+        else:
+          print ("You had no double rolls")
+
+        print ("")
+        print (f"You averaged {points_per_turn} points per turn!")
+        print ("")
+        input("Press ENTER to continue: ")
+        os.system('clear')
+        while True:
+          print ("")
+          print ("[1]Play Again")
+          print ("[2]Leave Game")
+          final_choice = input("Select one of the options above: ")
+
+          if final_choice == "1":
+            print ("")
+            print ("Restarting Game")
+            turns = 0
+            points = 0
+            double_roll = 0
+            double_roll_success = 0
+            double_roll_equal = 0
+            final_choice = "0"
+            restart_game = True
+            input ("Press ENTER to continue.")
+            break
+      
+          elif final_choice == "2":
+            break
+          
+          else:
+            print ("Error, unrecognized input.")
+            input ("Press ENTER to continue.")
+
+      elif out_choice == "2":
+        turns -= 1
+        break
+      
+      else:
+        print ("Error, unrecognized input.")
+        input ("Press ENTER to continue.")
+      
+  else:
+    print ("ERROR, unrecognized input.")
+    turns -= 1
+
+  
+  turns += 1
+  input("Press ENTER To Continue ")
+  os.system('clear')
+
+print ("Thanks for playing!")
